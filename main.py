@@ -10,7 +10,7 @@ def main():
 
     link = parser.get_part_link("re539279")
     
-    parser.get_page_data(link)
+    parser.get_page_data(link, "re539279")
 
 if __name__ == "__main__":
     main()
