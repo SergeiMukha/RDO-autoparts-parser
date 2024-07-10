@@ -28,9 +28,11 @@ class RdoParser:
 
     def get_page_data(self, link, art):
         self.driver.get(link)
+        
+        time.sleep(random.randint(3, 4))
 
         try:
-            models_element = self.driver.find_element(By.XPATH, "//div[@id='product-info']/p")
+            models_element = self.driver.find_element(By.ID, "product-info").find_element(By.TAG_NAME, "p")
 
             if("fits on" not in models_element.text.lower()): raise Exception()
             models = ", ".join(models_element.text.split("\n")[1:])
@@ -38,7 +40,6 @@ class RdoParser:
             models = None
 
         try:
-            time.sleep(random.randint(3, 4))
             img_link = WebDriverWait(self.driver, 2).until(EC.presence_of_element_located((By.XPATH, "//div[@class='pd_imagery']/div/div/div/ul/li[1]/img"))).get_attribute("src")
 
             self._download_photo(img_link, art.replace("/", "-"))
