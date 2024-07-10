@@ -18,10 +18,9 @@ class RdoParser:
     def get_part_link(self, art):
         self.driver.get(f"https://www.rdoequipment.com/search?query={art}")
 
-        try: WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "part_item")))
+        try: 
+            link = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "part_title"))).get_attribute("href")
         except TimeoutException: return None
-        
-        link = self.driver.find_element(By.CLASS_NAME, "part_item").find_element(By.TAG_NAME, "a").get_attribute("href")
 
         if(art.lower() not in link): return None
         else: return link
@@ -30,6 +29,7 @@ class RdoParser:
         self.driver.get(link)
 
         try:
+            time.sleep(2)
             img_link = WebDriverWait(self.driver, 2).until(EC.presence_of_element_located((By.XPATH, "//div[@class='pd_imagery']/div/div/div/ul/li[1]/img"))).get_attribute("src")
 
             self._download_photo(img_link, art.replace("/", "-"))
