@@ -40,7 +40,5 @@ def main():
 
         excelController.row += 1
 
-        time.sleep(random.randint(1, 2))
-
 if __name__ == "__main__":
     main()

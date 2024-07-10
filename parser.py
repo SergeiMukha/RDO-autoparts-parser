@@ -1,4 +1,5 @@
 import time
+import random
 import requests
 
 from selenium import webdriver
@@ -29,19 +30,19 @@ class RdoParser:
         self.driver.get(link)
 
         try:
-            time.sleep(2)
-            img_link = WebDriverWait(self.driver, 2).until(EC.presence_of_element_located((By.XPATH, "//div[@class='pd_imagery']/div/div/div/ul/li[1]/img"))).get_attribute("src")
-
-            self._download_photo(img_link, art.replace("/", "-"))
-        except TimeoutException: img_link = None
-
-        try:
             models_element = self.driver.find_element(By.XPATH, "//div[@id='product-info']/p")
 
             if("fits on" not in models_element.text.lower()): raise Exception()
             models = ", ".join(models_element.text.split("\n")[1:])
         except Exception as ex:
             models = None
+
+        try:
+            time.sleep(random.randint(3, 4))
+            img_link = WebDriverWait(self.driver, 2).until(EC.presence_of_element_located((By.XPATH, "//div[@class='pd_imagery']/div/div/div/ul/li[1]/img"))).get_attribute("src")
+
+            self._download_photo(img_link, art.replace("/", "-"))
+        except TimeoutException: img_link = None
 
         return {
             "models": models,
