@@ -11,7 +11,7 @@ from selenium.common.exceptions import NoSuchElementException, TimeoutException
 
 class RdoParser:
     def __init__(self):
-        self.driver = webdriver.Chrome = webdriver.Chrome()
+        self.driver: webdriver.Chrome = webdriver.Chrome()
 
         self.driver.get("https://www.rdoequipment.com")
         self._accept_cookies()
@@ -41,9 +41,16 @@ class RdoParser:
 
         try:
             img_container = WebDriverWait(self.driver, 2).until(EC.presence_of_element_located((By.CLASS_NAME, "images_wrap")))
-            img_link = img_container.find_element(By.TAG_NAME, "img").get_attribute("src")
+
+            # If there is a couple of elements then we have to grab the primary one in 650x650 resolution
+            try:
+                primary_image_container = img_container.find_element(By.CLASS_NAME, "pd_images_primary")
+                img_link = primary_image_container.find_element(By.TAG_NAME, "img").get_attribute("src")
+            except NoSuchElementException:
+                img_link = img_container.find_element(By.TAG_NAME, "img").get_attribute("src")
             
             if img_link == "https://www.rdoequipment.com/images/default-source/parts-images/default_image_703x381.png": raise TimeoutException()
+            if "650x650" not in img_link: print("Bad size")
 
             self._download_photo(img_link, art.replace("/", "-"))
         except TimeoutException: img_link = None
