@@ -40,5 +40,24 @@ def main():
 
         excelController.row += 1
 
+    # excelController.sheet["C5"] = "Пусто"
+    # for i in range(619, 1578):
+    #     img_link = excelController.sheet[f"C{i}"].value
+    #     if(img_link != "Пусто"): continue
+
+    #     art = str(excelController.sheet[f"A{i}"].value).replace(",", "")
+    #     print(i, art)
+
+    #     link = parser.get_part_link(art)
+    #     if(not link):
+    #         continue
+
+    #     data = parser.get_page_data(link, art)
+
+    #     excelController.sheet[f"B{i}"] = data["models"] or ""
+    #     excelController.sheet[f"C{i}"] = "" if data["img"] else "Пусто"
+
+    #     excelController.save_document()
+
 if __name__ == "__main__":
     main()

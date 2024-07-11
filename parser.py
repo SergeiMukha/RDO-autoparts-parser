@@ -40,7 +40,10 @@ class RdoParser:
             models = None
 
         try:
-            img_link = WebDriverWait(self.driver, 2).until(EC.presence_of_element_located((By.XPATH, "//div[@class='pd_imagery']/div/div/div/ul/li[1]/img"))).get_attribute("src")
+            img_container = WebDriverWait(self.driver, 2).until(EC.presence_of_element_located((By.CLASS_NAME, "images_wrap")))
+            img_link = img_container.find_element(By.TAG_NAME, "img").get_attribute("src")
+            
+            if img_link == "https://www.rdoequipment.com/images/default-source/parts-images/default_image_703x381.png": raise TimeoutException()
 
             self._download_photo(img_link, art.replace("/", "-"))
         except TimeoutException: img_link = None
@@ -50,7 +53,7 @@ class RdoParser:
             "img": img_link
         }
 
-
+    # Accept cookies
     def _accept_cookies(self):
         try:
             accept_button = WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.ID, "onetrust-accept-btn-handler")))
